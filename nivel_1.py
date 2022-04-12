@@ -1,7 +1,5 @@
 from time import sleep
 
-# O ROBO anda e marca o percurso e grava na pilha, mas não consegui fazer a volta dele AINDA (quando encurala). Se colocar a posição 1,15 ele funciona kkkk
-
 PAREDE = '#'
 CAMINHO_LIVRE = ' '
 CAMINHO_PERCORRIDO = "2"
