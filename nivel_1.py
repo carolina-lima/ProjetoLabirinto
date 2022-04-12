@@ -41,14 +41,20 @@ def movimento(posicao: tuple, direcao: list):
     return [posicao[0] + direcao[0], posicao[1] + direcao[1]]
 
 def verifica_movimento(posicao: tuple, direcao: list) -> bool:
-    if LABIRINTO[posicao[0] + direcao[0]][posicao[1] + direcao[1]] == SAIDA:
-        raise print("SUCESSO")
-        
-    return (LABIRINTO[posicao[0] + direcao[0]][posicao[1] + direcao[1]] == CAMINHO_LIVRE)
+    nova_posicao = LABIRINTO[posicao[0] + direcao[0]][posicao[1] + direcao[1]]
+
+    if nova_posicao == PAREDE:
+        return False
+    elif nova_posicao == CAMINHO_PERCORRIDO:
+        return False
+    elif nova_posicao == CAMINHO_LIVRE:
+        return True
+    elif nova_posicao == SAIDA:
+        return True
 
 def main():
     POSICAO_INICIAL = [1, 5]
-    PILHA = []
+    pilha = [POSICAO_INICIAL]
 
     LABIRINTO[POSICAO_INICIAL[0]][POSICAO_INICIAL[1]] = ROBO
 
@@ -58,31 +64,33 @@ def main():
 
     while POSICAO_ATUAL != SAIDA:
         if verifica_movimento(POSICAO_ATUAL, BAIXO):
-            PILHA.append(([POSICAO_ATUAL[0] + BAIXO[0]],[POSICAO_ATUAL[1] + BAIXO[1]]))
             POSICAO_ATUAL = movimento(POSICAO_ATUAL, BAIXO)
+            pilha.append(POSICAO_ATUAL)
             print_labirinto()
             sleep(1)
             
         elif verifica_movimento(POSICAO_ATUAL, DIREITA): #se a direção for a saída = true
-            PILHA.append(([POSICAO_ATUAL[0] + DIREITA[0]],[POSICAO_ATUAL[1] + DIREITA[1]]))
             POSICAO_ATUAL = movimento(POSICAO_ATUAL, DIREITA)
+            pilha.append(POSICAO_ATUAL)
             print_labirinto()
             sleep(1)
             
         elif verifica_movimento(POSICAO_ATUAL, ESQUERDA): #se a direção for a saída = true
-            PILHA.append(([POSICAO_ATUAL[0] + ESQUERDA[0]],[POSICAO_ATUAL[1] + ESQUERDA[1]]))
             POSICAO_ATUAL = movimento(POSICAO_ATUAL, ESQUERDA)
+            pilha.append(POSICAO_ATUAL)
             print_labirinto()
             sleep(1)
             
         elif verifica_movimento(POSICAO_ATUAL, CIMA): #se a direção for a saída = true
-            PILHA.append(([POSICAO_ATUAL[0] + CIMA[0]],[POSICAO_ATUAL[1] + CIMA[1]]))
             POSICAO_ATUAL = movimento(POSICAO_ATUAL, CIMA)
+            pilha.append(POSICAO_ATUAL)
             print_labirinto()
             sleep(1)
         else:
-            PILHA.pop()
-            POSICAO_ATUAL = PILHA[-1]
+            LABIRINTO[POSICAO_ATUAL[0]][POSICAO_ATUAL[1]] = CAMINHO_PERCORRIDO
+            pilha.pop()
+            POSICAO_ATUAL = pilha[-1]
+            LABIRINTO[POSICAO_ATUAL[0]][POSICAO_ATUAL[1]] = ROBO
             print_labirinto()
             sleep(1)
             continue
